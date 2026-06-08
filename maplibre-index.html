@@ -26,6 +26,12 @@
     }
     .btns button:hover { background: #374555; }
     .btns button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .github-btn {
+      margin-left: auto; background: #2b3744; color: #e5e7eb; border: 1px solid #3d4a59;
+      border-radius: 6px; padding: 6px 12px; font-size: 12.5px; font-weight: 600;
+      text-decoration: none; white-space: nowrap; transition: background .15s, border-color .15s;
+    }
+    .github-btn:hover { background: #374555; color: #fff; }
     #map { flex: 1; }
     .maplibregl-popup-content { font-size: 12.5px; max-width: 320px; }
 
@@ -78,6 +84,7 @@
     <div id="navbar">
       <span class="title">Building bounds <small id="count"></small></span>
       <div class="btns" id="btns"></div>
+      <a class="github-btn" href="https://github.com/wallabyway/acc-folder-rvt-on-map" target="_blank" rel="noopener">GitHub</a>
     </div>
     <div id="map"></div>
   </div>

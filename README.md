@@ -1,5 +1,7 @@
 # ACC folder RVT on a map
 
+**Live demo:** [wallabyway.github.io/acc-folder-rvt-on-map/maplibre-index.html](https://wallabyway.github.io/acc-folder-rvt-on-map/maplibre-index.html)
+
 A minimal reference for pulling **geolocation from APS Model Derivative OTG** (`otg_model.json`) and plotting **Revit building footprints** on a MapLibre map.
 
 No ACC API wiring yet — this uses the public [aps-extensions sample bucket](https://aps-extensions.autodesk.io) as a stand-in for "a folder of RVT files." The pattern is the same: list models → fetch OTG geo → emit GeoJSON → view on a map.
