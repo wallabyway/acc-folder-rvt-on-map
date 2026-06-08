@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Building bounds &mdash; bucket_bounds.geojson</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <style>
+    :root { --bar: #1f2933; --accent: #3b82f6; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    #app { display: flex; flex-direction: column; height: 100%; }
+    #navbar {
+      background: var(--bar); color: #fff; padding: 10px 14px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,.25); z-index: 2;
+    }
+    #navbar .title { font-weight: 600; font-size: 14px; margin-right: 4px; white-space: nowrap; }
+    #navbar .title small { font-weight: 400; opacity: .6; }
+    .btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btns button {
+      background: #2b3744; color: #e5e7eb; border: 1px solid #3d4a59;
+      border-radius: 6px; padding: 6px 11px; font-size: 12.5px; cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+    .btns button:hover { background: #374555; }
+    .btns button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    #map { flex: 1; }
+    .maplibregl-popup-content { font-size: 12.5px; max-width: 320px; }
+
+    /* Pushpin + callout markers */
+    .pin-wrap { display: flex; flex-direction: column; align-items: center; }
+    .pin-wrap.callout-open .callout {
+      display: block;
+      border-color: var(--accent);
+      box-shadow: 0 6px 20px rgba(59,130,246,.35);
+    }
+    .callout {
+      display: none;
+      background: #fff; border: 2px solid #e5e7eb; border-radius: 10px;
+      padding: 10px 12px; margin-bottom: 6px; min-width: 210px; max-width: 260px;
+      box-shadow: 0 4px 14px rgba(0,0,0,.18); font-size: 11.5px; line-height: 1.35;
+      position: relative; cursor: default;
+    }
+    .callout-close {
+      position: absolute; top: 2px; right: 4px; border: none; background: transparent;
+      font-size: 20px; line-height: 1; color: #9ca3af; cursor: pointer; padding: 2px 6px;
+    }
+    .callout-close:hover { color: #111827; }
+    .callout::after {
+      content: ""; position: absolute; left: 50%; bottom: -8px; transform: translateX(-50%);
+      border: 8px solid transparent; border-top-color: #fff;
+    }
+    .callout::before {
+      content: ""; position: absolute; left: 50%; bottom: -11px; transform: translateX(-50%);
+      border: 9px solid transparent; border-top-color: #e5e7eb;
+    }
+    .callout h3 {
+      margin: 0 0 6px; padding-right: 20px; font-size: 12.5px; font-weight: 700;
+      color: #111827; word-break: break-word;
+    }
+    .callout dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; }
+    .callout dt { color: #6b7280; font-weight: 500; }
+    .callout dd { margin: 0; color: #1f2937; word-break: break-all; }
+    .callout a { color: var(--accent); text-decoration: none; }
+    .callout a:hover { text-decoration: underline; }
+    .pushpin-hit { cursor: pointer; line-height: 0; }
+    .pushpin {
+      width: 36px; height: 48px; filter: drop-shadow(0 3px 4px rgba(0,0,0,.35));
+      transition: transform .15s;
+    }
+    .pin-wrap:hover .pushpin, .pin-wrap.callout-open .pushpin { transform: scale(1.12); }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="navbar">
+      <span class="title">Building bounds <small id="count"></small></span>
+      <div class="btns" id="btns"></div>
+    </div>
+    <div id="map"></div>
+  </div>
+
+  <script>
+    // --- Embedded data (MVP/bucket_bounds.geojson) ---------------------------------
+    const GEOJSON = /* @geojson */ {
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-71.46225661381987,42.9906354261655],[-71.45845697943729,42.99063540481384],[-71.45845692981845,42.991838936041425],[-71.46225663833863,42.99183895739398],[-71.46225661381987,42.9906354261655]]},"properties":{"name":"rac-advanced-sampleproject.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL3JhYy1hZHZhbmNlZC1zYW1wbGVwcm9qZWN0LnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":0,"model":"rac-advanced-sampleproject.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-71.46035679035356,42.991237181103685]},"properties":{"name":"footprint center","positionLL84":[-71.461,42.991,0],"model":"rac-advanced-sampleproject.rvt"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-71.03305492009262,42.21292735189073],[-71.03290911621264,42.21292735187152],[-71.03290911595931,42.2131098015796],[-71.03305492025895,42.21310980159881],[-71.03305492009262,42.21292735189073]]},"properties":{"name":"Office.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL09mZmljZS5ydnQ=","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":0,"model":"Office.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-71.03298201813088,42.213018576735166]},"properties":{"name":"footprint center","positionLL84":[-71.03299713134773,42.213001251220746,0],"model":"Office.rvt"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-74.95612634922524,40.62481993592584],[-74.95456924969095,40.62532000494474],[-74.95503381548532,40.62616242887392],[-74.95659093222022,40.62566235473941],[-74.95612634922524,40.62481993592584]]},"properties":{"name":"Snowdon Towers Sample Site.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBTaXRlLnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":333.98444821599986,"model":"Snowdon Towers Sample Site.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-74.95558008665543,40.62549118112098]},"properties":{"name":"footprint center","positionLL84":[-79.88666526953438,40.022371938428506,-12],"model":"Snowdon Towers Sample Site.rvt"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-71.0336240907531,42.21233211250649],[-71.03313631805065,42.21260535690151],[-71.03364914622252,42.213111270712986],[-71.03413692060718,42.212838024161485],[-71.0336240907531,42.21233211250649]]},"properties":{"name":"rac-basic-sampleproject.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL3JhYy1iYXNpYy1zYW1wbGVwcm9qZWN0LnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":322.9999999999997,"model":"rac-basic-sampleproject.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-71.03363661890836,42.21272169107062]},"properties":{"name":"footprint center","positionLL84":[-71.0335,42.213,0],"model":"rac-basic-sampleproject.rvt"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-74.95607686378135,40.62552589737812],[-74.95538815775393,40.625747078567144],[-74.95553404097373,40.62601161082233],[-74.95622274939011,40.62579042892281],[-74.95607686378135,40.62552589737812]]},"properties":{"name":"Snowdon Towers Sample HVAC.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBIVkFDLnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":333.98444821599986,"model":"Snowdon Towers Sample HVAC.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-74.95580545297477,40.6257687539226]},"properties":{"name":"footprint center","positionLL84":[-79.88666526953438,40.022371938428506,-12],"model":"Snowdon Towers Sample HVAC.rvt"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-74.95603475130065,40.62549299634375],[-74.95542822216028,40.625687786193296],[-74.95557050859408,40.6259457962602],[-74.95617703978647,40.625751005800346],[-74.95603475130065,40.62549299634375]]},"properties":{"name":"Snowdon Towers Sample Architectural.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBBcmNoaXRlY3R1cmFsLnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":333.98444821599986,"model":"Snowdon Towers Sample Architectural.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-74.95580263046037,40.6257193961494]},"properties":{"name":"footprint center","positionLL84":[-79.88666526953438,40.022371938428506,-12],"model":"Snowdon Towers Sample Architectural.rvt"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-74.95598553495435,40.62522677272986],[-74.95520427545574,40.62547767812122],[-74.95554281213798,40.6260915544254],[-74.95632407792546,40.625840647163656],[-74.95598553495435,40.62522677272986]]},"properties":{"name":"Snowdon Towers Sample Structural.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBTdHJ1Y3R1cmFsLnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":333.98444821599986,"model":"Snowdon Towers Sample Structural.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-74.95576417511839,40.625659163110036]},"properties":{"name":"footprint center","positionLL84":[-79.88666526953438,40.022371938428506,-12],"model":"Snowdon Towers Sample Structural.rvt"}}
+  ]
+};
+
+    // --- Map (OpenFreeMap vector OSM tiles, no API key needed) ---------------------
+    const map = new maplibregl.Map({
+      container: "map",
+      style: "https://tiles.openfreemap.org/styles/liberty",
+      center: [-72, 41],
+      zoom: 4,
+      pitch: 0,
+      bearing: 0
+    });
+
+    const outlines = {
+      type: "FeatureCollection",
+      features: GEOJSON.features.filter(f => f.geometry.type === "LineString")
+    };
+    const points = GEOJSON.features.filter(f => f.geometry.type === "Point");
+
+    const PUSHPIN_SVG = `<svg class="pushpin" viewBox="0 0 36 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M18 0C9.716 0 3 6.716 3 15c0 10.5 15 33 15 33s15-22.5 15-33C33 6.716 26.284 0 18 0z" fill="#dc2626"/>
+      <circle cx="18" cy="15" r="7" fill="#fff"/>
+      <circle cx="18" cy="15" r="4" fill="#dc2626"/>
+    </svg>`;
+
+    const markersByModel = new Map();
+    let openCalloutModel = null;
+
+    function fmtCoord(pair) {
+      if (!pair || pair.length < 2) return "—";
+      return `${Number(pair[0]).toFixed(6)}, ${Number(pair[1]).toFixed(6)}`;
+    }
+
+    function buildModelMeta() {
+      const byModel = {};
+      GEOJSON.features.forEach(f => {
+        const model = f.properties.model;
+        if (!model) return;
+        if (!byModel[model]) byModel[model] = { model };
+        if (f.geometry.type === "Point") {
+          byModel[model].center = f.geometry.coordinates;
+          byModel[model].positionLL84 = f.properties.positionLL84;
+        } else {
+          byModel[model].urn = f.properties.urn;
+          byModel[model].distance_unit = f.properties.distance_unit;
+          byModel[model].angle_to_true_north = f.properties.angle_to_true_north;
+          byModel[model].kind = f.properties.kind;
+        }
+      });
+      return Object.values(byModel);
+    }
+
+    function fanOutCoords(models) {
+      const groups = new Map();
+      models.forEach(m => {
+        const key = m.center.map(c => c.toFixed(5)).join(",");
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(m);
+      });
+      groups.forEach(group => {
+        if (group.length === 1) return;
+        const [lon, lat] = group[0].center;
+        const step = 0.00035;
+        group.forEach((m, i) => {
+          const angle = (2 * Math.PI * i) / group.length;
+          m.pinCoord = [lon + Math.cos(angle) * step, lat + Math.sin(angle) * step];
+        });
+      });
+      models.forEach(m => { if (!m.pinCoord) m.pinCoord = m.center; });
+    }
+
+    function calloutHtml(meta) {
+      const viewerUrl = meta.urn
+        ? `https://aps-extensions.autodesk.io/?model=${encodeURIComponent(meta.urn)}`
+        : null;
+      const trueNorth = meta.angle_to_true_north != null
+        ? `${Number(meta.angle_to_true_north).toFixed(1)}°`
+        : "—";
+      return `
+        <div class="callout">
+          <button type="button" class="callout-close" aria-label="Close callout">&times;</button>
+          <h3>${meta.model}</h3>
+          <dl>
+            <dt>Footprint</dt><dd>${fmtCoord(meta.center)}</dd>
+            <dt>positionLL84</dt><dd>${fmtCoord(meta.positionLL84)}</dd>
+            <dt>Units</dt><dd>${meta.distance_unit || "—"}</dd>
+            <dt>True north</dt><dd>${trueNorth}</dd>
+            <dt>URN</dt><dd title="${meta.urn || ""}">${meta.urn ? meta.urn.slice(0, 28) + "…" : "—"}</dd>
+            ${viewerUrl ? `<dt>Link</dt><dd><a href="${viewerUrl}" target="_blank" rel="noopener">Open in Viewer</a></dd>` : ""}
+          </dl>
+        </div>`;
+    }
+
+    function closeAllCallouts() {
+      markersByModel.forEach(marker => marker.getElement().classList.remove("callout-open"));
+      openCalloutModel = null;
+    }
+
+    function openCallout(model) {
+      closeAllCallouts();
+      const el = markersByModel.get(model)?.getElement();
+      if (!el) return;
+      el.classList.add("callout-open");
+      openCalloutModel = model;
+    }
+
+    function toggleCallout(model) {
+      if (openCalloutModel === model) closeAllCallouts();
+      else openCallout(model);
+    }
+
+    function bounds(features) {
+      const b = new maplibregl.LngLatBounds();
+      features.forEach(f => {
+        const g = f.geometry;
+        (g.type === "Point" ? [g.coordinates] : g.coordinates).forEach(c => b.extend(c));
+      });
+      return b;
+    }
+
+    function modelFeatures(modelName) {
+      return GEOJSON.features.filter(f => f.properties.model === modelName);
+    }
+
+    map.on("load", () => {
+      // Flat vector map only: hide the style's 3D building extrusions.
+      if (map.getLayer("building-3d")) {
+        map.setLayoutProperty("building-3d", "visibility", "none");
+      }
+
+      map.addSource("footprints", { type: "geojson", data: outlines });
+
+      // White halo underneath so orange outlines read on any basemap.
+      map.addLayer({
+        id: "footprints-halo", type: "line", source: "footprints",
+        layout: { "line-join": "round", "line-cap": "round" },
+        paint: {
+          "line-color": "#ffffff",
+          "line-width": ["interpolate", ["linear"], ["zoom"], 10, 6, 14, 10, 18, 14],
+          "line-opacity": 0.95
+        }
+      });
+      map.addLayer({
+        id: "footprints", type: "line", source: "footprints",
+        layout: { "line-join": "round", "line-cap": "round" },
+        paint: {
+          "line-color": "#ea580c",
+          "line-width": ["interpolate", ["linear"], ["zoom"], 10, 3, 14, 6, 18, 9],
+          "line-opacity": 1
+        }
+      });
+      map.fitBounds(bounds(GEOJSON.features), { padding: 60, duration: 0 });
+
+      const modelMeta = buildModelMeta();
+      fanOutCoords(modelMeta);
+      modelMeta.forEach(meta => {
+        const el = document.createElement("div");
+        el.className = "pin-wrap";
+        el.innerHTML = calloutHtml(meta) + `<div class="pushpin-hit">${PUSHPIN_SVG}</div>`;
+        el.querySelector(".callout").addEventListener("click", e => e.stopPropagation());
+        el.querySelector(".callout-close").addEventListener("click", e => {
+          e.stopPropagation();
+          closeAllCallouts();
+        });
+        el.querySelector(".pushpin-hit").addEventListener("click", e => {
+          e.stopPropagation();
+          toggleCallout(meta.model);
+        });
+        const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
+          .setLngLat(meta.pinCoord)
+          .addTo(map);
+        markersByModel.set(meta.model, marker);
+      });
+
+      map.on("click", e => {
+        const hit = map.queryRenderedFeatures(e.point, { layers: ["footprints", "footprints-halo"] });
+        if (!hit.length) closeAllCallouts();
+      });
+      document.addEventListener("keydown", e => {
+        if (e.key === "Escape") closeAllCallouts();
+      });
+
+      // Click a footprint to open that model's callout.
+      ["footprints-halo", "footprints"].forEach(layer => {
+        map.on("click", layer, e => {
+          e.originalEvent.stopPropagation();
+          openCallout(e.features[0].properties.model);
+        });
+        map.on("mouseenter", layer, () => map.getCanvas().style.cursor = "pointer");
+        map.on("mouseleave", layer, () => map.getCanvas().style.cursor = "");
+      });
+    });
+
+    // --- Navbar buttons: one per model point, zoom to its reference point -----------
+    const btnWrap = document.getElementById("btns");
+    document.getElementById("count").textContent = `(${points.length} models)`;
+    let activeBtn = null;
+
+    [...points].sort((a, b) => a.properties.model.localeCompare(b.properties.model)).forEach(pt => {
+      const btn = document.createElement("button");
+      btn.textContent = pt.properties.model;
+      btn.addEventListener("click", () => {
+        const model = pt.properties.model;
+        const feats = modelFeatures(model);
+        map.fitBounds(bounds(feats), { padding: 120, maxZoom: 19, pitch: 0, bearing: 0, duration: 1200 });
+        openCallout(model);
+        if (activeBtn) activeBtn.classList.remove("active");
+        btn.classList.add("active");
+        activeBtn = btn;
+      });
+      btnWrap.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

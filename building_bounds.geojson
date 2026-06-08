@@ -1,0 +1,53 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -71.0336240907531,
+            42.21233211250649
+          ],
+          [
+            -71.03313631805065,
+            42.21260535690151
+          ],
+          [
+            -71.03364914622252,
+            42.213111270712986
+          ],
+          [
+            -71.03413692060718,
+            42.212838024161485
+          ],
+          [
+            -71.0336240907531,
+            42.21233211250649
+          ]
+        ]
+      },
+      "properties": {
+        "name": "building bounds",
+        "urn": "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL3JhYy1iYXNpYy1zYW1wbGVwcm9qZWN0LnJ2dA==",
+        "kind": "aabb_footprint_outline",
+        "distance_unit": "foot",
+        "angle_to_true_north": 322.9999999999997
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.0335,
+          42.213
+        ]
+      },
+      "properties": {
+        "name": "positionLL84 reference point"
+      }
+    }
+  ]
+}

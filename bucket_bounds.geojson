@@ -1,0 +1,390 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -71.46225661381987,
+            42.9906354261655
+          ],
+          [
+            -71.45845697943729,
+            42.99063540481384
+          ],
+          [
+            -71.45845692981845,
+            42.991838936041425
+          ],
+          [
+            -71.46225663833863,
+            42.99183895739398
+          ],
+          [
+            -71.46225661381987,
+            42.9906354261655
+          ]
+        ]
+      },
+      "properties": {
+        "name": "rac-advanced-sampleproject.rvt",
+        "urn": "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL3JhYy1hZHZhbmNlZC1zYW1wbGVwcm9qZWN0LnJ2dA==",
+        "kind": "aabb_footprint_outline",
+        "distance_unit": "foot",
+        "angle_to_true_north": 0,
+        "model": "rac-advanced-sampleproject.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.46035679035356,
+          42.991237181103685
+        ]
+      },
+      "properties": {
+        "name": "footprint center",
+        "positionLL84": [
+          -71.461,
+          42.991,
+          0
+        ],
+        "model": "rac-advanced-sampleproject.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -71.03305492009262,
+            42.21292735189073
+          ],
+          [
+            -71.03290911621264,
+            42.21292735187152
+          ],
+          [
+            -71.03290911595931,
+            42.2131098015796
+          ],
+          [
+            -71.03305492025895,
+            42.21310980159881
+          ],
+          [
+            -71.03305492009262,
+            42.21292735189073
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Office.rvt",
+        "urn": "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL09mZmljZS5ydnQ=",
+        "kind": "aabb_footprint_outline",
+        "distance_unit": "foot",
+        "angle_to_true_north": 0,
+        "model": "Office.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.03298201813088,
+          42.213018576735166
+        ]
+      },
+      "properties": {
+        "name": "footprint center",
+        "positionLL84": [
+          -71.03299713134773,
+          42.213001251220746,
+          0
+        ],
+        "model": "Office.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.95612634922524,
+            40.62481993592584
+          ],
+          [
+            -74.95456924969095,
+            40.62532000494474
+          ],
+          [
+            -74.95503381548532,
+            40.62616242887392
+          ],
+          [
+            -74.95659093222022,
+            40.62566235473941
+          ],
+          [
+            -74.95612634922524,
+            40.62481993592584
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Snowdon Towers Sample Site.rvt",
+        "urn": "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBTaXRlLnJ2dA==",
+        "kind": "aabb_footprint_outline",
+        "distance_unit": "foot",
+        "angle_to_true_north": 333.98444821599986,
+        "model": "Snowdon Towers Sample Site.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.95558008665543,
+          40.62549118112098
+        ]
+      },
+      "properties": {
+        "name": "footprint center",
+        "positionLL84": [
+          -79.88666526953438,
+          40.022371938428506,
+          -12
+        ],
+        "model": "Snowdon Towers Sample Site.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -71.0336240907531,
+            42.21233211250649
+          ],
+          [
+            -71.03313631805065,
+            42.21260535690151
+          ],
+          [
+            -71.03364914622252,
+            42.213111270712986
+          ],
+          [
+            -71.03413692060718,
+            42.212838024161485
+          ],
+          [
+            -71.0336240907531,
+            42.21233211250649
+          ]
+        ]
+      },
+      "properties": {
+        "name": "rac-basic-sampleproject.rvt",
+        "urn": "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL3JhYy1iYXNpYy1zYW1wbGVwcm9qZWN0LnJ2dA==",
+        "kind": "aabb_footprint_outline",
+        "distance_unit": "foot",
+        "angle_to_true_north": 322.9999999999997,
+        "model": "rac-basic-sampleproject.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.03363661890836,
+          42.21272169107062
+        ]
+      },
+      "properties": {
+        "name": "footprint center",
+        "positionLL84": [
+          -71.0335,
+          42.213,
+          0
+        ],
+        "model": "rac-basic-sampleproject.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.95607686378135,
+            40.62552589737812
+          ],
+          [
+            -74.95538815775393,
+            40.625747078567144
+          ],
+          [
+            -74.95553404097373,
+            40.62601161082233
+          ],
+          [
+            -74.95622274939011,
+            40.62579042892281
+          ],
+          [
+            -74.95607686378135,
+            40.62552589737812
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Snowdon Towers Sample HVAC.rvt",
+        "urn": "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBIVkFDLnJ2dA==",
+        "kind": "aabb_footprint_outline",
+        "distance_unit": "foot",
+        "angle_to_true_north": 333.98444821599986,
+        "model": "Snowdon Towers Sample HVAC.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.95580545297477,
+          40.6257687539226
+        ]
+      },
+      "properties": {
+        "name": "footprint center",
+        "positionLL84": [
+          -79.88666526953438,
+          40.022371938428506,
+          -12
+        ],
+        "model": "Snowdon Towers Sample HVAC.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.95603475130065,
+            40.62549299634375
+          ],
+          [
+            -74.95542822216028,
+            40.625687786193296
+          ],
+          [
+            -74.95557050859408,
+            40.6259457962602
+          ],
+          [
+            -74.95617703978647,
+            40.625751005800346
+          ],
+          [
+            -74.95603475130065,
+            40.62549299634375
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Snowdon Towers Sample Architectural.rvt",
+        "urn": "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBBcmNoaXRlY3R1cmFsLnJ2dA==",
+        "kind": "aabb_footprint_outline",
+        "distance_unit": "foot",
+        "angle_to_true_north": 333.98444821599986,
+        "model": "Snowdon Towers Sample Architectural.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.95580263046037,
+          40.6257193961494
+        ]
+      },
+      "properties": {
+        "name": "footprint center",
+        "positionLL84": [
+          -79.88666526953438,
+          40.022371938428506,
+          -12
+        ],
+        "model": "Snowdon Towers Sample Architectural.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.95598553495435,
+            40.62522677272986
+          ],
+          [
+            -74.95520427545574,
+            40.62547767812122
+          ],
+          [
+            -74.95554281213798,
+            40.6260915544254
+          ],
+          [
+            -74.95632407792546,
+            40.625840647163656
+          ],
+          [
+            -74.95598553495435,
+            40.62522677272986
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Snowdon Towers Sample Structural.rvt",
+        "urn": "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBTdHJ1Y3R1cmFsLnJ2dA==",
+        "kind": "aabb_footprint_outline",
+        "distance_unit": "foot",
+        "angle_to_true_north": 333.98444821599986,
+        "model": "Snowdon Towers Sample Structural.rvt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.95576417511839,
+          40.625659163110036
+        ]
+      },
+      "properties": {
+        "name": "footprint center",
+        "positionLL84": [
+          -79.88666526953438,
+          40.022371938428506,
+          -12
+        ],
+        "model": "Snowdon Towers Sample Structural.rvt"
+      }
+    }
+  ]
+}
