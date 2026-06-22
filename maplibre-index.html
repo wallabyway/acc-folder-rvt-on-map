@@ -21,14 +21,14 @@
     .btns { display: flex; gap: 8px; flex-wrap: wrap; }
     .btns button {
       background: #2b3744; color: #e5e7eb; border: 1px solid #3d4a59;
-      border-radius: 6px; padding: 6px 8px; font-size: 12px; cursor: pointer;
+      border-radius: 6px; padding: 6px 11px; font-size: 12.5px; cursor: pointer;
       transition: background .15s, border-color .15s;
     }
     .btns button:hover { background: #374555; }
     .btns button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
     .github-btn {
       margin-left: auto; background: #2b3744; color: #e5e7eb; border: 1px solid #3d4a59;
-      border-radius: 6px; padding: 6px 9px; font-size: 12px; font-weight: 600;
+      border-radius: 6px; padding: 6px 12px; font-size: 12.5px; font-weight: 600;
       text-decoration: none; white-space: nowrap; transition: background .15s, border-color .15s;
     }
     .github-btn:hover { background: #374555; color: #fff; }
@@ -84,7 +84,6 @@
     <div id="navbar">
       <span class="title">Building bounds <small id="count"></small></span>
       <div class="btns" id="btns"></div>
-      <button type="button" class="github-btn" id="layer-toggle">OSM Liberty</button>
       <a class="github-btn" href="https://github.com/wallabyway/acc-folder-rvt-on-map" target="_blank" rel="noopener">GitHub</a>
     </div>
     <div id="map"></div>
@@ -92,38 +91,30 @@
 
   <script>
     // --- Embedded data (MVP/bucket_bounds.geojson) ---------------------------------
-    const GEOJSON = /* @geojson */ {"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-71.46225661381987,42.9906354261655],[-71.45845697943729,42.99063540481384],[-71.45845692981845,42.991838936041425],[-71.46225663833863,42.99183895739398],[-71.46225661381987,42.9906354261655]]},"properties":{"name":"rac-advanced-sampleproject.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL3JhYy1hZHZhbmNlZC1zYW1wbGVwcm9qZWN0LnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":0,"model":"rac-advanced-sampleproject.rvt"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-71.461,42.991]},"properties":{"name":"positionLL84 reference point","footprint_center":[-71.46035679035356,42.991237181103685],"positionLL84":[-71.461,42.991,0],"model":"rac-advanced-sampleproject.rvt"}},{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-71.03305492009262,42.21292735189073],[-71.03290911621264,42.21292735187152],[-71.03290911595931,42.2131098015796],[-71.03305492025895,42.21310980159881],[-71.03305492009262,42.21292735189073]]},"properties":{"name":"Office.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL09mZmljZS5ydnQ=","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":0,"model":"Office.rvt"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-71.03299713134773,42.213001251220746]},"properties":{"name":"positionLL84 reference point","footprint_center":[-71.03298201813088,42.213018576735166],"positionLL84":[-71.03299713134773,42.213001251220746,0],"model":"Office.rvt"}},{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-79.88696367179936,40.02142136707257],[-79.88545214543177,40.021988545738374],[-79.88597473346573,40.022811763618975],[-79.88748627367184,40.022244578217574],[-79.88696367179936,40.02142136707257]]},"properties":{"name":"Snowdon Towers Sample Site.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBTaXRlLnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":333.98444821599986,"model":"Snowdon Towers Sample Site.rvt"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-79.88666526953438,40.022371938428506]},"properties":{"name":"positionLL84 reference point","footprint_center":[-79.88646920609217,40.022116563661875],"positionLL84":[-79.88666526953438,40.022371938428506,-12],"model":"Snowdon Towers Sample Site.rvt"}},{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-71.03327219405558,42.21239991519604],[-71.03278441931468,42.212673158091505],[-71.03329724522666,42.213179073470165],[-71.03378502164986,42.212905828418236],[-71.03327219405558,42.21239991519604]]},"properties":{"name":"rac-basic-sampleproject.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL3JhYy1iYXNpYy1zYW1wbGVwcm9qZWN0LnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":322.9999999999997,"model":"rac-basic-sampleproject.rvt"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-71.0335,42.213]},"properties":{"name":"positionLL84 reference point","footprint_center":[-71.0332847200617,42.212789493793984],"positionLL84":[-71.0335,42.213,0],"model":"rac-basic-sampleproject.rvt"}},{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-79.88696734076126,40.02212975727259],[-79.88629879278034,40.022380621345526],[-79.88646289553748,40.02263912236179],[-79.88713144544039,40.02238825735334],[-79.88696734076126,40.02212975727259]]},"properties":{"name":"Snowdon Towers Sample HVAC.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBIVkFDLnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":333.98444821599986,"model":"Snowdon Towers Sample HVAC.rvt"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-79.88666526953438,40.022371938428506]},"properties":{"name":"positionLL84 reference point","footprint_center":[-79.88671511862987,40.02238443958331],"positionLL84":[-79.88666526953438,40.022371938428506,-12],"model":"Snowdon Towers Sample HVAC.rvt"}},{"type":"Feature","geometry":{"type":"LineString","coordinates":[[15.438746217698629,47.064346554648274],[15.44081959316844,47.0629047196796],[15.442811223712413,47.06424190630824],[15.440737850096413,47.06568377699358],[15.438746217698629,47.064346554648274]]},"properties":{"name":"dach-sample-project.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL2RhY2gtc2FtcGxlLXByb2plY3QucnZ0","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":45.50286069399746,"model":"dach-sample-project.rvt"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[15.440460205078141,47.064491271972706]},"properties":{"name":"positionLL84 reference point","footprint_center":[15.440778721168973,47.064294239407424],"positionLL84":[15.440460205078141,47.064491271972706,0],"model":"dach-sample-project.rvt"}},{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-79.88692421673173,40.02209847184851],[-79.88633544035383,40.0223194027792],[-79.88649549706797,40.02257153030339],[-79.88708427509678,40.022350598569126],[-79.88692421673173,40.02209847184851]]},"properties":{"name":"Snowdon Towers Sample Architectural.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBBcmNoaXRlY3R1cmFsLnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":333.98444821599986,"model":"Snowdon Towers Sample Architectural.rvt"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-79.88666526953438,40.022371938428506]},"properties":{"name":"positionLL84 reference point","footprint_center":[-79.88670985731258,40.02233500087506],"positionLL84":[-79.88666526953438,40.022371938428506,-12],"model":"Snowdon Towers Sample Architectural.rvt"}},{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-79.88686099355297,40.02183342185727],[-79.88610260068552,40.02211799902442],[-79.88648341783959,40.02271787926668],[-79.88724181576664,40.022433299636866],[-79.88686099355297,40.02183342185727]]},"properties":{"name":"Snowdon Towers Sample Structural.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBTdHJ1Y3R1cmFsLnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":333.98444821599986,"model":"Snowdon Towers Sample Structural.rvt"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-79.88666526953438,40.022371938428506]},"properties":{"name":"positionLL84 reference point","footprint_center":[-79.88667220696118,40.02227564994631],"positionLL84":[-79.88666526953438,40.022371938428506,-12],"model":"Snowdon Towers Sample Structural.rvt"}}]};
-
-    const STYLES = [
-      { name: "OSM Liberty", url: "https://tiles.openfreemap.org/styles/liberty" },
-      { name: "Positron", url: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json" },
-      { name: "Dark Matter", url: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json" },
-      { name: "Voyager", url: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json" },
-      {
-        name: "Satellite",
-        url: {
-          version: 8,
-          sources: {
-            satellite: {
-              type: "raster",
-              tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
-              tileSize: 256,
-              attribution: "&copy; Esri",
-              maxzoom: 19
-            }
-          },
-          layers: [
-            { id: "satellite", type: "raster", source: "satellite" }
-          ]
-        }
-      }
-    ];
-    let styleIndex = 0;
+    const GEOJSON = /* @geojson */ {
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-71.46225661381987,42.9906354261655],[-71.45845697943729,42.99063540481384],[-71.45845692981845,42.991838936041425],[-71.46225663833863,42.99183895739398],[-71.46225661381987,42.9906354261655]]},"properties":{"name":"rac-advanced-sampleproject.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL3JhYy1hZHZhbmNlZC1zYW1wbGVwcm9qZWN0LnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":0,"model":"rac-advanced-sampleproject.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-71.46035679035356,42.991237181103685]},"properties":{"name":"footprint center","positionLL84":[-71.461,42.991,0],"model":"rac-advanced-sampleproject.rvt"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-71.03305492009262,42.21292735189073],[-71.03290911621264,42.21292735187152],[-71.03290911595931,42.2131098015796],[-71.03305492025895,42.21310980159881],[-71.03305492009262,42.21292735189073]]},"properties":{"name":"Office.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL09mZmljZS5ydnQ=","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":0,"model":"Office.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-71.03298201813088,42.213018576735166]},"properties":{"name":"footprint center","positionLL84":[-71.03299713134773,42.213001251220746,0],"model":"Office.rvt"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-74.95612634922524,40.62481993592584],[-74.95456924969095,40.62532000494474],[-74.95503381548532,40.62616242887392],[-74.95659093222022,40.62566235473941],[-74.95612634922524,40.62481993592584]]},"properties":{"name":"Snowdon Towers Sample Site.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBTaXRlLnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":333.98444821599986,"model":"Snowdon Towers Sample Site.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-74.95558008665543,40.62549118112098]},"properties":{"name":"footprint center","positionLL84":[-79.88666526953438,40.022371938428506,-12],"model":"Snowdon Towers Sample Site.rvt"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-71.0336240907531,42.21233211250649],[-71.03313631805065,42.21260535690151],[-71.03364914622252,42.213111270712986],[-71.03413692060718,42.212838024161485],[-71.0336240907531,42.21233211250649]]},"properties":{"name":"rac-basic-sampleproject.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL3JhYy1iYXNpYy1zYW1wbGVwcm9qZWN0LnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":322.9999999999997,"model":"rac-basic-sampleproject.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-71.03363661890836,42.21272169107062]},"properties":{"name":"footprint center","positionLL84":[-71.0335,42.213,0],"model":"rac-basic-sampleproject.rvt"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-74.95607686378135,40.62552589737812],[-74.95538815775393,40.625747078567144],[-74.95553404097373,40.62601161082233],[-74.95622274939011,40.62579042892281],[-74.95607686378135,40.62552589737812]]},"properties":{"name":"Snowdon Towers Sample HVAC.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBIVkFDLnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":333.98444821599986,"model":"Snowdon Towers Sample HVAC.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-74.95580545297477,40.6257687539226]},"properties":{"name":"footprint center","positionLL84":[-79.88666526953438,40.022371938428506,-12],"model":"Snowdon Towers Sample HVAC.rvt"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-74.95603475130065,40.62549299634375],[-74.95542822216028,40.625687786193296],[-74.95557050859408,40.6259457962602],[-74.95617703978647,40.625751005800346],[-74.95603475130065,40.62549299634375]]},"properties":{"name":"Snowdon Towers Sample Architectural.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBBcmNoaXRlY3R1cmFsLnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":333.98444821599986,"model":"Snowdon Towers Sample Architectural.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-74.95580263046037,40.6257193961494]},"properties":{"name":"footprint center","positionLL84":[-79.88666526953438,40.022371938428506,-12],"model":"Snowdon Towers Sample Architectural.rvt"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-74.95598553495435,40.62522677272986],[-74.95520427545574,40.62547767812122],[-74.95554281213798,40.6260915544254],[-74.95632407792546,40.625840647163656],[-74.95598553495435,40.62522677272986]]},"properties":{"name":"Snowdon Towers Sample Structural.rvt","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6c2FtcGxlbW9kZWxzL1Nub3dkb24lMjBUb3dlcnMlMjBTYW1wbGUlMjBTdHJ1Y3R1cmFsLnJ2dA==","kind":"aabb_footprint_outline","distance_unit":"foot","angle_to_true_north":333.98444821599986,"model":"Snowdon Towers Sample Structural.rvt"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-74.95576417511839,40.625659163110036]},"properties":{"name":"footprint center","positionLL84":[-79.88666526953438,40.022371938428506,-12],"model":"Snowdon Towers Sample Structural.rvt"}}
+  ]
+};
 
     // --- Map (OpenFreeMap vector OSM tiles, no API key needed) ---------------------
     const map = new maplibregl.Map({
       container: "map",
-      style: STYLES[styleIndex].url,
+      style: "https://tiles.openfreemap.org/styles/liberty",
       center: [-72, 41],
       zoom: 4,
       pitch: 0,
@@ -135,36 +126,15 @@
       features: GEOJSON.features.filter(f => f.geometry.type === "LineString")
     };
     const points = GEOJSON.features.filter(f => f.geometry.type === "Point");
-    const models = [...new Set(points.map(pt => pt.properties.model))].sort((a, b) => a.localeCompare(b));
-    const MODEL_PALETTE = ["#ea580c", "#2563eb", "#16a34a", "#9333ea", "#dc2626", "#0891b2", "#ca8a04", "#db2777"];
-    const modelColors = new Map(models.map((model, index) => [model, MODEL_PALETTE[index % MODEL_PALETTE.length]]));
 
-    function modelColor(model) {
-      return modelColors.get(model) || MODEL_PALETTE[0];
-    }
-
-    function shortModelName(model) {
-      return model
-        .replace(/^Snowdon Towers Sample /, "Snowdon ")
-        .replace(/^rac-advanced-sampleproject\.rvt$/, "RAC Adv")
-        .replace(/^rac-basic-sampleproject\.rvt$/, "RAC Basic")
-        .replace(/^dach-sample-project\.rvt$/, "DACH")
-        .replace(/ Sample /g, " ")
-        .replace(/\.rvt$/i, "");
-    }
-
-    function pushpinSvg(color) {
-      return `<svg class="pushpin" viewBox="0 0 36 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M18 0C9.716 0 3 6.716 3 15c0 10.5 15 33 15 33s15-22.5 15-33C33 6.716 26.284 0 18 0z" fill="${color}"/>
+    const PUSHPIN_SVG = `<svg class="pushpin" viewBox="0 0 36 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M18 0C9.716 0 3 6.716 3 15c0 10.5 15 33 15 33s15-22.5 15-33C33 6.716 26.284 0 18 0z" fill="#dc2626"/>
       <circle cx="18" cy="15" r="7" fill="#fff"/>
-      <circle cx="18" cy="15" r="4" fill="${color}"/>
+      <circle cx="18" cy="15" r="4" fill="#dc2626"/>
     </svg>`;
-    }
 
     const markersByModel = new Map();
     let openCalloutModel = null;
-    let outlinesVisible = true;
-    let outlineFilterModel = null;
 
     function fmtCoord(pair) {
       if (!pair || pair.length < 2) return "—";
@@ -178,67 +148,35 @@
         if (!model) return;
         if (!byModel[model]) byModel[model] = { model };
         if (f.geometry.type === "Point") {
-          byModel[model].markerBase = f.geometry.coordinates;
-          byModel[model].center = f.properties.footprint_center || f.geometry.coordinates;
+          byModel[model].center = f.geometry.coordinates;
           byModel[model].positionLL84 = f.properties.positionLL84;
-          byModel[model].color = modelColor(model);
         } else {
           byModel[model].urn = f.properties.urn;
           byModel[model].distance_unit = f.properties.distance_unit;
           byModel[model].angle_to_true_north = f.properties.angle_to_true_north;
           byModel[model].kind = f.properties.kind;
-          byModel[model].color = modelColor(model);
         }
       });
-      Object.values(byModel).forEach(meta => {
-        if (!meta.markerBase) meta.markerBase = pickMarkerBase(meta);
-      });
       return Object.values(byModel);
-    }
-
-    function coordDistanceMeters(a, b) {
-      if (!a || !b || a.length < 2 || b.length < 2) return 0;
-      const lon1 = Number(a[0]);
-      const lat1 = Number(a[1]);
-      const lon2 = Number(b[0]);
-      const lat2 = Number(b[1]);
-      const toRad = Math.PI / 180;
-      const dLat = (lat2 - lat1) * toRad;
-      const dLon = (lon2 - lon1) * toRad;
-      const h =
-        Math.sin(dLat / 2) ** 2 +
-        Math.cos(lat1 * toRad) * Math.cos(lat2 * toRad) * Math.sin(dLon / 2) ** 2;
-      return 2 * 6371000 * Math.asin(Math.min(1, Math.sqrt(h)));
-    }
-
-    function pickMarkerBase(meta) {
-      const footprint = Array.isArray(meta.center) && meta.center.length >= 2 ? meta.center : null;
-      const ref = Array.isArray(meta.positionLL84) && meta.positionLL84.length >= 2
-        ? [meta.positionLL84[0], meta.positionLL84[1]]
-        : null;
-      if (!footprint) return ref;
-      if (!ref) return footprint;
-      // Backward-compatible fallback for older embedded GeoJSON without marker points.
-      return coordDistanceMeters(footprint, ref) > 1000 ? ref : footprint;
     }
 
     function fanOutCoords(models) {
       const groups = new Map();
       models.forEach(m => {
-        const key = m.markerBase.map(c => c.toFixed(5)).join(",");
+        const key = m.center.map(c => c.toFixed(5)).join(",");
         if (!groups.has(key)) groups.set(key, []);
         groups.get(key).push(m);
       });
       groups.forEach(group => {
         if (group.length === 1) return;
-        const [lon, lat] = group[0].markerBase;
+        const [lon, lat] = group[0].center;
         const step = 0.00035;
         group.forEach((m, i) => {
           const angle = (2 * Math.PI * i) / group.length;
           m.pinCoord = [lon + Math.cos(angle) * step, lat + Math.sin(angle) * step];
         });
       });
-      models.forEach(m => { if (!m.pinCoord) m.pinCoord = m.markerBase; });
+      models.forEach(m => { if (!m.pinCoord) m.pinCoord = m.center; });
     }
 
     function calloutHtml(meta) {
@@ -294,105 +232,33 @@
       return GEOJSON.features.filter(f => f.properties.model === modelName);
     }
 
-    function setMarkerVisibility(predicate) {
-      markersByModel.forEach((marker, modelName) => {
-        marker.getElement().style.display = predicate(modelName) ? "" : "none";
-      });
-      if (openCalloutModel && !predicate(openCalloutModel)) {
-        closeAllCallouts();
-      }
-    }
-
-    function showAllMarkers() {
-      setMarkerVisibility(() => true);
-    }
-
-    function setOutlineVisibility(isVisible) {
-      outlinesVisible = isVisible;
-      ["footprints-halo", "footprints"].forEach(layerId => {
-        if (map.getLayer(layerId)) {
-          map.setLayoutProperty(layerId, "visibility", isVisible ? "visible" : "none");
-        }
-      });
-    }
-
-    function setOutlineFilter(modelName = null) {
-      outlineFilterModel = modelName;
-      const filter = modelName ? ["==", ["get", "model"], modelName] : null;
-      ["footprints-halo", "footprints"].forEach(layerId => {
-        if (map.getLayer(layerId)) {
-          map.setFilter(layerId, filter);
-        }
-      });
-    }
-
-    function resetSceneFiltering() {
-      showAllMarkers();
-      setOutlineVisibility(true);
-      setOutlineFilter(null);
-    }
-
-    function addFootprintLayers() {
-      if (!map.isStyleLoaded()) return false;
-
-      const buildingLayerId = (map.getStyle().layers || []).find(layer =>
-        layer.type === "fill-extrusion" || layer.id === "building-3d"
-      )?.id;
-
-      if (!map.getSource("footprints")) {
-        map.addSource("footprints", { type: "geojson", data: outlines });
-      }
-
-      if (!map.getLayer("footprints-halo")) {
-        // White halo underneath so orange outlines read on any basemap.
-        const haloLayer = {
-          id: "footprints-halo", type: "line", source: "footprints",
-          layout: { "line-join": "round", "line-cap": "round" },
-          paint: {
-            "line-color": "#ffffff",
-            "line-width": ["interpolate", ["linear"], ["zoom"], 10, 3, 14, 5, 18, 7],
-            "line-opacity": 0.95
-          }
-        };
-        map.addLayer(haloLayer, buildingLayerId);
-      }
-
-      if (!map.getLayer("footprints")) {
-        const footprintLayer = {
-          id: "footprints", type: "line", source: "footprints",
-          layout: { "line-join": "round", "line-cap": "round" },
-          paint: {
-            "line-color": [
-              "match",
-              ["get", "model"],
-              ...models.flatMap(model => [model, modelColor(model)]),
-              MODEL_PALETTE[0]
-            ],
-            "line-width": ["interpolate", ["linear"], ["zoom"], 10, 1.5, 14, 3, 18, 4.5],
-            "line-opacity": 1
-          }
-        };
-        map.addLayer(footprintLayer, buildingLayerId);
-      }
-
-      // Keep footprints below 3D buildings when the active basemap provides them.
-      if (buildingLayerId) {
-        if (map.getLayer("footprints-halo")) map.moveLayer("footprints-halo", buildingLayerId);
-        if (map.getLayer("footprints")) map.moveLayer("footprints", buildingLayerId);
-      }
-      setOutlineVisibility(outlinesVisible);
-      setOutlineFilter(outlineFilterModel);
-      return map.getLayer("footprints-halo") && map.getLayer("footprints");
-    }
-
-    function restoreFootprints(attempt = 0) {
-      if (addFootprintLayers()) return;
-      if (attempt >= 30) return;
-      window.setTimeout(() => restoreFootprints(attempt + 1), 100);
-    }
-
     map.on("load", () => {
-      restoreFootprints();
+      // Flat vector map only: hide the style's 3D building extrusions.
+      if (map.getLayer("building-3d")) {
+        map.setLayoutProperty("building-3d", "visibility", "none");
+      }
+
+      map.addSource("footprints", { type: "geojson", data: outlines });
+
+      // White halo underneath so orange outlines read on any basemap.
+      map.addLayer({
+        id: "footprints-halo", type: "line", source: "footprints",
+        layout: { "line-join": "round", "line-cap": "round" },
+        paint: {
+          "line-color": "#ffffff",
+          "line-width": ["interpolate", ["linear"], ["zoom"], 10, 6, 14, 10, 18, 14],
+          "line-opacity": 0.95
+        }
+      });
+      map.addLayer({
+        id: "footprints", type: "line", source: "footprints",
+        layout: { "line-join": "round", "line-cap": "round" },
+        paint: {
+          "line-color": "#ea580c",
+          "line-width": ["interpolate", ["linear"], ["zoom"], 10, 3, 14, 6, 18, 9],
+          "line-opacity": 1
+        }
+      });
       map.fitBounds(bounds(GEOJSON.features), { padding: 60, duration: 0 });
 
       const modelMeta = buildModelMeta();
@@ -400,7 +266,7 @@
       modelMeta.forEach(meta => {
         const el = document.createElement("div");
         el.className = "pin-wrap";
-        el.innerHTML = calloutHtml(meta) + `<div class="pushpin-hit">${pushpinSvg(meta.color)}</div>`;
+        el.innerHTML = calloutHtml(meta) + `<div class="pushpin-hit">${PUSHPIN_SVG}</div>`;
         el.querySelector(".callout").addEventListener("click", e => e.stopPropagation());
         el.querySelector(".callout-close").addEventListener("click", e => {
           e.stopPropagation();
@@ -437,94 +303,20 @@
 
     // --- Navbar buttons: one per model point, zoom to its reference point -----------
     const btnWrap = document.getElementById("btns");
-    const layerBtn = document.getElementById("layer-toggle");
     document.getElementById("count").textContent = `(${points.length} models)`;
     let activeBtn = null;
 
-    layerBtn.textContent = `Style: ${STYLES[styleIndex].name}`;
-    layerBtn.title = `Map style: ${STYLES[styleIndex].name}`;
-    layerBtn.addEventListener("click", () => {
-      styleIndex = (styleIndex + 1) % STYLES.length;
-      const nextStyle = STYLES[styleIndex];
-      const camera = {
-        center: map.getCenter(),
-        zoom: map.getZoom(),
-        pitch: map.getPitch(),
-        bearing: map.getBearing()
-      };
-
-      const restoreAfterStyleChange = () => {
-        map.jumpTo(camera);
-        restoreFootprints();
-      };
-      map.once("style.load", restoreAfterStyleChange);
-      map.once("styledata", restoreFootprints);
-      map.once("idle", restoreFootprints);
-      map.setStyle(nextStyle.url);
-      restoreFootprints();
-
-      layerBtn.textContent = `Style: ${nextStyle.name}`;
-      layerBtn.title = `Map style: ${nextStyle.name}`;
-    });
-
-    function setActiveButton(btn) {
-      if (activeBtn) activeBtn.classList.remove("active");
-      btn.classList.add("active");
-      activeBtn = btn;
-    }
-
-    const firstSnowdon = [...points].find(pt => (pt.properties.model || "").includes("Snowdon Towers"));
-    if (firstSnowdon) {
-      const snowdonModel = firstSnowdon.properties.model;
-
-      const pinOnlyBtn = document.createElement("button");
-      pinOnlyBtn.textContent = "S1 Pin";
-      pinOnlyBtn.title = `${snowdonModel}: pin only`;
-      pinOnlyBtn.addEventListener("click", () => {
-        resetSceneFiltering();
-        setOutlineVisibility(false);
-        setMarkerVisibility(modelName => modelName === snowdonModel);
-        const pinCoord = markersByModel.get(snowdonModel)?.getLngLat();
-        if (pinCoord) {
-          map.flyTo({
-            center: [pinCoord.lng, pinCoord.lat],
-            zoom: 15,
-            pitch: 0,
-            bearing: 0,
-            duration: 1200
-          });
-        }
-        openCallout(snowdonModel);
-        setActiveButton(pinOnlyBtn);
-      });
-      btnWrap.appendChild(pinOnlyBtn);
-
-      const polylineOnlyBtn = document.createElement("button");
-      polylineOnlyBtn.textContent = "S1 Line";
-      polylineOnlyBtn.title = `${snowdonModel}: polyline only`;
-      polylineOnlyBtn.addEventListener("click", () => {
-        const feats = modelFeatures(snowdonModel);
-        map.fitBounds(bounds(feats), { padding: 120, maxZoom: 19, pitch: 0, bearing: 0, duration: 1200 });
-        resetSceneFiltering();
-        setMarkerVisibility(() => false);
-        closeAllCallouts();
-        setOutlineFilter(snowdonModel);
-        setActiveButton(polylineOnlyBtn);
-      });
-      btnWrap.appendChild(polylineOnlyBtn);
-    }
-
     [...points].sort((a, b) => a.properties.model.localeCompare(b.properties.model)).forEach(pt => {
       const btn = document.createElement("button");
-      btn.textContent = shortModelName(pt.properties.model);
-      btn.title = pt.properties.model;
+      btn.textContent = pt.properties.model;
       btn.addEventListener("click", () => {
         const model = pt.properties.model;
         const feats = modelFeatures(model);
         map.fitBounds(bounds(feats), { padding: 120, maxZoom: 19, pitch: 0, bearing: 0, duration: 1200 });
-        resetSceneFiltering();
         openCallout(model);
-        setActiveButton(btn);
+        if (activeBtn) activeBtn.classList.remove("active");
+        btn.classList.add("active");
+        activeBtn = btn;
       });
       btnWrap.appendChild(btn);
     });

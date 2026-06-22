@@ -1,8 +1,7 @@
 """Geometry/math: turn an otg_model.json into a GeoJSON building-footprint outline.
 
-Transform chain: Autodesk.Geolocation extension uses (WGS84 ellipsoid + ENU +
-refPointTransform rotation + refPointLMV), so model-space AABB corners convert
-to the same lon/lat the Viewer would produce.
+Transform chain: Autodesk.Geolocation extension uses (WGS84 ellipsoid + ENU + refPointTransform), so
+model-space AABB corners convert to the same lon/lat the Viewer would produce.
 
 The AABB itself needs no math (it is `world bounding box`); only the lon/lat
 conversion does. The `globalOffset` is NOT needed here -- raw model-space corners
@@ -51,8 +50,8 @@ def _ecef_to_ll(x, y, z):
     return math.degrees(lam), math.degrees(phi), h
 
 
-def _model_to_ecef_matrix(position_ll84, ref_point_lmv, ref_point_transform, unit_to_meter):
-    """Compose model-space -> ECEF (4x4), matching LMV LocalCS."""
+def _model_to_ecef_matrix(position_ll84, ref_point_transform, unit_to_meter):
+    """Compose model-space -> ECEF (4x4), matching LMV LocalCS (minus the LMV offset)."""
     lon, lat = position_ll84[0], position_ll84[1]
     h = position_ll84[2] if len(position_ll84) > 2 else 0.0
     world_origin = _ll_to_ecef(lon, lat, h)
@@ -79,10 +78,7 @@ def _model_to_ecef_matrix(position_ll84, ref_point_lmv, ref_point_transform, uni
         geo_ref[:3, 0] = s[0:3]
         geo_ref[:3, 1] = s[3:6]
         geo_ref[:3, 2] = s[6:9]
-        if not (ref_point_lmv and len(ref_point_lmv) >= 3):
-            geo_ref[:3, 3] = s[9:12]
-    if ref_point_lmv and len(ref_point_lmv) >= 3:
-        geo_ref[:3, 3] = -(geo_ref[:3, :3] @ np.array(ref_point_lmv[:3]))
+        geo_ref[:3, 3] = s[9:12]
 
     return translation @ enu @ scale @ geo_ref
 
@@ -109,10 +105,7 @@ def build_footprint_geojson(otg: dict, urn: str, name: str = ""):
 
     unit = (otg.get("distance unit") or {}).get("value")
     matrix = _model_to_ecef_matrix(
-        position,
-        geo.get("refPointLMV"),
-        cv.get("refPointTransform"),
-        _UNIT_TO_METER.get(str(unit).lower(), 1.0),
+        position, cv.get("refPointTransform"), _UNIT_TO_METER.get(str(unit).lower(), 1.0)
     )
 
     z = mn[2]  # ground level (min Z) for the footprint
@@ -120,8 +113,9 @@ def build_footprint_geojson(otg: dict, urn: str, name: str = ""):
     outline = [model_point_to_lonlat(matrix, cx, cy, z) for cx, cy in corners_model]
     outline.append(outline[0])  # close the loop -> polyline outline
 
-    # Keep the footprint center for diagnostics, but place the map marker on the
-    # model's georeferenced datum rather than forcing it to the AABB center.
+    # Map marker at the footprint center (where the building actually is).
+    # positionLL84 can be a project datum far from the geometry (e.g. Snowdon samples);
+    # using it for zoom makes fitBounds span hundreds of km.
     center_lon = sum(c[0] for c in outline[:-1]) / 4
     center_lat = sum(c[1] for c in outline[:-1]) / 4
 
@@ -141,10 +135,9 @@ def build_footprint_geojson(otg: dict, urn: str, name: str = ""):
             },
             {
                 "type": "Feature",
-                "geometry": {"type": "Point", "coordinates": position[:2]},
+                "geometry": {"type": "Point", "coordinates": [center_lon, center_lat]},
                 "properties": {
-                    "name": "positionLL84 reference point",
-                    "footprint_center": [center_lon, center_lat],
+                    "name": "footprint center",
                     "positionLL84": position,
                 },
             },
